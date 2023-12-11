@@ -13,16 +13,54 @@ public class DatabaseMysql {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
+
+    public static void putUsername(String username) {
+        try (Connection connection = connect()) {
+            String sql = "insert into cur_user (user) values (?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, username);
+                ResultSet resultSet = preparedStatement.executeQuery();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getUsername() {
+        String username = "";
+        try (Connection connection = connect()){
+            String sql = "select * from cur_user";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                username = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return username;
+    }
+
+    public static void delUsername() {
+        try (Connection connection = connect()) {
+            String sql = "delete from cur_user";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Provider -> Server: 주차공간 등록
     public static void saveProviderData(ArrayList<String> data) {
         System.out.println("database.java 파일");
         System.out.println(data);
 
-        String str;
         for (int i = 0; i < data.size(); i++) {
             System.out.println(data.get(i));
         }
 
-        String username = "jinyoung";
+        String username = DatabaseMysql.getUsername();
         String location = data.get(0);
         String av_time_st = data.get(1);
         String av_time_end = data.get(2);
@@ -52,20 +90,56 @@ public class DatabaseMysql {
             e.printStackTrace();
         }
     }
-    public static List<String> getDatabaseList() {
-        List<String> databaseList = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> getAvailableList(String loc) {
+        ArrayList<ArrayList<String>> totalProvider = new ArrayList<>();
+        ArrayList<String> singleProvider = new ArrayList<>();
 
-        try (Connection connection = connect()){
-            DatabaseMetaData metaData = connection.getMetaData();
-            ResultSet resultSet = metaData.getCatalogs();
+        String sql;
+        try (Connection connection = connect()) {
+            if (loc == null) {
+                sql = "select * from car_place where is_available = 1";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        while (resultSet.next()) {
+                            ResultSetMetaData metaData = resultSet.getMetaData();
+                            int columnCount = metaData.getColumnCount();
+                            for (int i = 1; i <= columnCount; i++) {
+                                Object value = resultSet.getObject(i);
+                                singleProvider.add((String) value);     // 확인 필요
+                            }
+                            totalProvider.add(singleProvider);
+                        }
+                    }
+                }
+            } else {
+                sql = "select * from car_place where (location) like ? and is_available = 1";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    preparedStatement.setString(1, "%" + loc + "%");
 
-            while (resultSet.next()) {
-                String dbName = resultSet.getString("TABLE_CAT");
-                databaseList.add(dbName);
+                    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        while (resultSet.next()) {
+                            ResultSetMetaData metaData = resultSet.getMetaData();
+
+                            int columnCount = metaData.getColumnCount();
+                            for (int i = 1; i <= columnCount; i++) {
+//                                String columnName = metaData.getColumnName(i);
+                                Object value = resultSet.getObject(i);
+                                singleProvider.add((String) value);     // 확인 필요
+                            }
+                            totalProvider.add(singleProvider);
+                        }
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return databaseList;
+        return totalProvider;
     }
+
+    public static void makeReservation() {
+
+    }
+
+
 }

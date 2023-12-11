@@ -43,10 +43,25 @@ public class Server {
             }
         }
         private void handleButtonClickEvent(String eventName, ArrayList<String> data) {
-            if ("Provider".equals(eventName)) {
+            if ("UserLogin".equals(eventName)) {
+                DatabaseMysql.putUsername(data.toString());
+            }
+            else if ("UserLogout".equals(eventName)) {
+                DatabaseMysql.delUsername();
+            }
+            else if ("saveProviderData".equals(eventName)) {
                 System.out.println(data);
                 DatabaseMysql.saveProviderData(data);
                 System.out.println("Received Event From Client");
+            }
+            else if ("getAvailableList".equals(eventName)) {
+                DatabaseMysql.getAvailableList(data.toString());
+            }
+            else if ("".equals(eventName)) {
+
+            }
+            else if ("".equals(eventName)) {
+
             }
         }
     }
