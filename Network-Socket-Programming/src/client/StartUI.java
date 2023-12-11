@@ -41,7 +41,8 @@ public class StartUI extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String idInputValue = userIDInput.getText();
+                ArrayList<String> idInputValue = new ArrayList<String>();
+                idInputValue.add(userIDInput.getText());
                 // 서버로 전송
                 // sendToServer("StartUI", idInputValue);
                 // 창 전환
