@@ -9,8 +9,6 @@ import java.util.ArrayList;
 
 public class Provider extends JPanel {
     // 객체 생성
-    JPanel jPanel = new JPanel();
-    BorderLayout layout = new BorderLayout();
     JPanel inputPanel = new JPanel();
     // 주차장 위치 입력받기 위한 UI
     JPanel locationPanel = new JPanel();
@@ -46,7 +44,7 @@ public class Provider extends JPanel {
     JButton finButton = new JButton("입력 완료");
     JPanel finBtPanel = new JPanel();
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         new Provider();
     }
 
@@ -138,24 +136,25 @@ public class Provider extends JPanel {
 
 
                 // 서버로 데이터 전송하기
-                sendToServer("Provider", data);
+                sendToServer("saveProviderData", data);
 
                 // 완료 패널로 전환
                 FinPanel finPanel = new FinPanel();
-                locationPanel.setVisible(false); // 창 안보이게 하기
-                ymdPanel.setVisible(false);
-                timeContainer.setVisible(false);
-                feePanel.setVisible(false);
-                finBtPanel.setVisible(false);
+                remove(locationPanel);
+                remove(ymdPanel);
+                remove(timeContainer);
+                remove(feePanel);
+                remove(finBtPanel);
                 add(finPanel);
-                finPanel.setVisible(true);
+                revalidate();
+                repaint();
             }
         });
     }
     private static void sendToServer(String eventClass, ArrayList<String> data) {
         try (Socket socket = new Socket("172.20.6.21", 8890);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-                out.writeObject("Provider");
+                out.writeObject(eventClass);
                 out.writeObject(data);
                 System.out.println("Event sent to the Server: " + data);
             } catch (IOException e) {
