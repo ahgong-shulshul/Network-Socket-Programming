@@ -6,15 +6,13 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class InitUI extends javax.swing.JFrame {
-
+public class InitUI extends JFrame {
     // 버튼 UI
     JPanel pvBtContainer = new JPanel();
     JButton providerButton = new JButton("주차장 제공하기");
     JPanel rtBtContainer = new JPanel();
     JButton renterButton = new JButton("주차장 대여하기");
     JPanel buttonContainer = new JPanel();
-    Header header = new Header();
 
     public static void main(String[] args) {
         new InitUI();
@@ -26,8 +24,7 @@ public class InitUI extends javax.swing.JFrame {
         setSize(400, 700);
         setLayout(null);
 
-        // 구성 UI :: Header, ButtonContainer
-        add(header);
+        // 구성 UI :: ButtonContainer
         pvBtContainer.add(providerButton);
         rtBtContainer.add(renterButton);
         /// 각 버튼에 패딩넣기
@@ -42,7 +39,6 @@ public class InitUI extends javax.swing.JFrame {
         /// ButtonContainer
         buttonContainer.setBounds(45, 200, 300, 200);
         buttonContainer.setLayout(new GridLayout(2, 1));
-        this.add(header);
         this.add(buttonContainer);
 
         // 버튼 이벤트 추가
@@ -50,9 +46,10 @@ public class InitUI extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Provider provider = new Provider();
-                buttonContainer.setVisible(false); // 창 안보이게 하기
-                provider.setVisible(true);
+                remove(buttonContainer);
                 add(provider);
+                revalidate();
+                repaint();
             }
         });
 
@@ -60,11 +57,13 @@ public class InitUI extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Renter renter = new Renter();
-                buttonContainer.setVisible(false); // 창 안보이게 하기
-                renter.setVisible(true);
+                remove(buttonContainer);
                 add(renter);
+                revalidate();
+                repaint();
             }
         });
+        setVisible(true);
 
         // 화면 중앙에 띄우기
         Dimension frameSize = getSize();
@@ -78,14 +77,4 @@ public class InitUI extends javax.swing.JFrame {
         setVisible(true);
     }
 
-}
-
-class Header extends JPanel {
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // 여기에 그리기 코드를 추가
-        g.setColor(Color.RED);
-        g.fillRect(50, 50, 100, 100);
-    }
 }
