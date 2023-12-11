@@ -1,8 +1,13 @@
 package server;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+
+import database.DatabaseMysql;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
     public static void main(String[] args) throws Exception {
@@ -34,12 +39,37 @@ public class Server {
         public void run() {
             try (
                     ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+//                    ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())
             ) {
-                String receivedData = (String) in.readObject();
-                System.out.println("Server received data from client: " + receivedData);
+                Object eventObject = in.readObject();
+//                String eventObject = in.readObject();
+                System.out.println(eventObject);      // 두개
+
+
+                if (eventObject instanceof String) {
+
+                    handleButtonClickEvent((String) eventObject, null);
+
+                    // 클라이언트로 데이터베이스 목록 전송
+//                    List<String> databaseList = DatabaseMysql.getDatabaseList();
+//                    out.writeObject(databaseList);
+//                    System.out.println("Server sent database list to client.");
+
+//                  Object event = in.readObject();
+//                  String receivedData = (String) in.readObject();
+//                  System.out.println("Server received data from client: " + receivedData);
+//                  DatabaseMysql.saveToDatabase(receivedData);
+                }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
+        private void handleButtonClickEvent(String eventType, ArrayList<String> data) {
+            if ("Provider".equals(eventType)) {
+                DatabaseMysql.saveToDatabase("data");
+                System.out.println("Received Event From Client");
+            }
+        }
     }
+
 }
