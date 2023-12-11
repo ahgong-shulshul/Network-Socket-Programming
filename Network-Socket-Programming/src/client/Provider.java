@@ -50,7 +50,7 @@ public class Provider extends JPanel {
         timeContainer.setLayout(new GridLayout(2, 1));
         inputPanel.setLayout(new GridLayout(4, 1));
         feePanel.setLayout(new GridLayout(2, 1));
-        // jPanel.setLayout(new GridLayout(2, 1));
+         jPanel.setLayout(new GridLayout(2, 1));
 
         // 버튼 UI
         /// 주차장 위치
