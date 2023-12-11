@@ -56,6 +56,16 @@ public class InitUI extends javax.swing.JFrame {
             }
         });
 
+        renterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Renter renter = new Renter();
+                buttonContainer.setVisible(false); // 창 안보이게 하기
+                renter.setVisible(true);
+                add(renter);
+            }
+        });
+
         // 화면 중앙에 띄우기
         Dimension frameSize = getSize();
         Dimension windowSize = Toolkit.getDefaultToolkit().getScreenSize();
