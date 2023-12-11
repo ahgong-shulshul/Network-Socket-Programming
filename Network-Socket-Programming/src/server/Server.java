@@ -1,23 +1,21 @@
 package server;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 
-import database.DatabaseMysql;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Server {
     public static void main(String[] args) throws Exception {
         ServerSocket serverSocket = new ServerSocket(8890);
         System.out.println("Server Ready");
 
-        while (true) {
-            Socket clientSocket = serverSocket.accept();     // 클라이언트 연결 대기
-            new Thread(new ClientHandler(clientSocket)).start();
-        }
+        Socket clientSocket = serverSocket.accept();     // 클라이언트 연결 대기
+
+        System.out.println("Client Ready");
+        new Thread(new ClientHandler(clientSocket)).start();
+
 
 //        BufferedReader keyRead = new BufferedReader(new InputStreamReader(System.in));      // 키보드 입력을 받기 위함
 //        OutputStream ostream = sock.getOutputStream();                  // 클라이언트의 메세지를 받기 위한 스트림
@@ -66,7 +64,8 @@ public class Server {
         }
         private void handleButtonClickEvent(String eventType, ArrayList<String> data) {
             if ("Provider".equals(eventType)) {
-                DatabaseMysql.saveToDatabase("data");
+//                DatabaseMysql.saveToDatabase("data");
+                DatabaseMysql.saveToDatabase("asdf");
                 System.out.println("Received Event From Client");
             }
         }

@@ -1,4 +1,4 @@
-package database;
+package server;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ public class DatabaseMysql {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "Min02choi!";
 
-    private static Connection connect() throws SQLException {
+    public static Connection connect() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
@@ -33,7 +33,7 @@ public class DatabaseMysql {
             ResultSet resultSet = metaData.getCatalogs();
 
             while (resultSet.next()) {
-                String dbName = resultSet.getString("location");
+                String dbName = resultSet.getString("TABLE_CAT");
                 databaseList.add(dbName);
             }
         } catch (SQLException e) {

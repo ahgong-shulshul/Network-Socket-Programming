@@ -138,7 +138,7 @@ public class Provider extends JPanel {
 
 
                 // 서버로 데이터 전송하기
-                //sendToServer("Provider", data);
+                sendToServer("Provider", data);
 
                 // 완료 패널로 전환
                 FinPanel finPanel = new FinPanel();
@@ -153,7 +153,7 @@ public class Provider extends JPanel {
         });
     }
     private static void sendToServer(String eventClass, ArrayList<String> data) {
-        try (Socket socket = new Socket("127.20.6.21", 8890);
+        try (Socket socket = new Socket("172.20.6.21", 8890);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 out.writeObject(data);
                 System.out.println("Event sent to the Server: " + data);
