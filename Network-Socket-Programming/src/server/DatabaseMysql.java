@@ -13,13 +13,53 @@ public class DatabaseMysql {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
+    private static boolean isUserExist(String user) {
+        try (Connection connection = connect()) {
+            String sql = "select count(*) FROM user WHERE uname columnName = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, user);
+
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        int count = resultSet.getInt(1);
+                        return true;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    // user에 없으면 추가
+
 
     public static void putUsername(String username) {
         try (Connection connection = connect()) {
+            // 중복인지 확인 필요
+            if (isUserExist(username)) {
+                System.out.println("조치를 취하기");
+            } else {
+                String sql = "insert into user (uname) values (?)";
+                try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                    preparedStatement.setString(1, username);
+                    int rowsAffected = preparedStatement.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Username inserted successfully.");
+                    } else {
+                        System.out.println("Failed to insert username.");
+                    }
+                }
+            }
             String sql = "insert into cur_user (user) values (?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, username);
-                ResultSet resultSet = preparedStatement.executeQuery();
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Username inserted successfully.");
+                } else {
+                    System.out.println("Failed to insert username.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -31,8 +71,11 @@ public class DatabaseMysql {
         try (Connection connection = connect()){
             String sql = "select * from cur_user";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
-                username = resultSet.getString(1);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        username = resultSet.getString(1);
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -60,7 +103,9 @@ public class DatabaseMysql {
             System.out.println(data.get(i));
         }
 
-        String username = DatabaseMysql.getUsername();
+        String username = getUsername();
+        System.out.println(username);       // 실험헤보기
+
         String location = data.get(0);
         String av_time_st = data.get(1);
         String av_time_end = data.get(2);
@@ -137,9 +182,29 @@ public class DatabaseMysql {
         return totalProvider;
     }
 
-    public static void makeReservation() {
-
+    public static void makeReservation(String parking_loc) {
+        // is_available=0 으로 바꾸고 테이블에 insert
+        // 이거 안되면 개수 세서 하던가
+        String cur_user = getUsername();
+        try (Connection connection = connect()) {
+            String sql = "update car_place set is_available = 0 where place_no = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, parking_loc);
+                ResultSet resultSet = preparedStatement.executeQuery();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try (Connection connection = connect()) {
+            String sql = "insert into occupied values (?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, parking_loc);
+                preparedStatement.setString(2, cur_user);
+                ResultSet resultSet = preparedStatement.executeQuery();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-
 
 }

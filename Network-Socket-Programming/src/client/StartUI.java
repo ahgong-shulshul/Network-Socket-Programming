@@ -41,24 +41,28 @@ public class StartUI extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String idInputValue = userIDInput.getText();
+                ArrayList<String> idInputValue = new ArrayList<>();
+                idInputValue.add(userIDInput.getText());
                 // 서버로 전송
-//                 sendToServer("StartUI", idInputValue);
+                 sendToServer("UserLogin", idInputValue);
                 // 창 전환
-                // InitUI home = new InitUI();
-                // dispose();
-                // add(home);
-                // revalidate();
-                // repaint();
+                 InitUI home = new InitUI();
+                 dispose();
+                 add(home);
+                 revalidate();
+                 repaint();
 
+                /*
                 Object[][] data = {
                     {"1", "John Doe", "30"},
                     {"2", "Jane Doe", "25"},
                     {"3", "Bob Smith", "40"},
                     // Add more data as needed
                 };
-                home.drawSearchTable(data);
-                add(home);
+                */
+
+//                home.drawSearchTable(data);
+//                add(home);
             }
         });
 

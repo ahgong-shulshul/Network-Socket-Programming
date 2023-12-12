@@ -11,9 +11,11 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(8890);
         System.out.println("Server Ready");
 
-        Socket clientSocket = serverSocket.accept();     // 클라이언트 연결 대기
-        System.out.println("Client Ready");
-        new Thread(new ClientHandler(clientSocket)).start();
+        while (true) {
+            Socket clientSocket = serverSocket.accept();     // 클라이언트 연결 대기
+            System.out.println("Client Ready");
+            new Thread(new ClientHandler(clientSocket)).start();
+        }
     }
 
     private static class ClientHandler implements Runnable {
@@ -24,8 +26,8 @@ public class Server {
         @Override
         public void run() {
             try (
-                    ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream())
-//                  ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())
+                    ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
+//                    ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())
             ) {
                 Object firstObject = in.readObject();
                 Object secondObject = in.readObject();
@@ -42,9 +44,9 @@ public class Server {
                 e.printStackTrace();
             }
         }
-        private void handleButtonClickEvent(String eventName, ArrayList<String> data) {
+        private void handleButtonClickEvent(String eventName, ArrayList<String> data) throws IOException {
             if ("UserLogin".equals(eventName)) {
-                DatabaseMysql.putUsername(data.toString());
+                DatabaseMysql.putUsername(data.get(0).toString());
             }
             else if ("UserLogout".equals(eventName)) {
                 DatabaseMysql.delUsername();
@@ -55,7 +57,14 @@ public class Server {
                 System.out.println("Received Event From Client");
             }
             else if ("getAvailableList".equals(eventName)) {
-                DatabaseMysql.getAvailableList(data.toString());
+                ArrayList<ArrayList<String>> totalProvider;
+                totalProvider = DatabaseMysql.getAvailableList(data.toString());
+                try (ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
+                    out.writeObject(totalProvider);
+                    System.out.println("Sent to Client");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             else if ("".equals(eventName)) {
 
