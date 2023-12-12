@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.swing.table.*;
+
 
 public class StartUI extends JFrame {
     JPanel jPanel = new JPanel();
@@ -15,7 +17,7 @@ public class StartUI extends JFrame {
     JTextField userIDInput = new JTextField(20);
     JPanel btPanel = new JPanel();
     JButton loginButton = new JButton("로그인하기");
-    SearchData home = new SearchData();
+    
 
     public static void main(String[] args) {
         new StartUI();
@@ -25,8 +27,6 @@ public class StartUI extends JFrame {
         // Frame 기본 설정
         setTitle("주차장 제공/대여 서비스");
         setSize(400, 700);
-        jPanel.setLayout(new GridLayout(2, 1));
-        inputPanel.setLayout(new GridLayout(2, 1));
         userIDLabel.setHorizontalAlignment(JLabel.CENTER);
 
         inputPanel.add(userIDLabel);
@@ -37,32 +37,22 @@ public class StartUI extends JFrame {
         jPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         add(jPanel);
 
+
         // 버튼 이벤트 추가
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<String> idInputValue = new ArrayList<>();
+                ArrayList<String> idInputValue = new ArrayList<String>();
                 idInputValue.add(userIDInput.getText());
                 // 서버로 전송
                  sendToServer("UserLogin", idInputValue);
                 // 창 전환
-                 InitUI home = new InitUI();
-                 dispose();
-                 add(home);
-                 revalidate();
-                 repaint();
 
-                /*
-                Object[][] data = {
-                    {"1", "John Doe", "30"},
-                    {"2", "Jane Doe", "25"},
-                    {"3", "Bob Smith", "40"},
-                    // Add more data as needed
-                };
-                */
-
-//                home.drawSearchTable(data);
-//                add(home);
+                InitUI home = new InitUI();
+                dispose();
+                add(home);
+                revalidate();
+                repaint();
             }
         });
 
@@ -88,5 +78,6 @@ public class StartUI extends JFrame {
                 e.printStackTrace();
             }
     }
+    
     
 }

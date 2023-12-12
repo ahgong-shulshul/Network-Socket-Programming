@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class FinPanel extends JPanel {
     JPanel jPanel = new JPanel();
@@ -44,6 +45,9 @@ public class FinPanel extends JPanel {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // 서버로 전송
+                // sendToServer("FinPanel", null);
+                // 창 전환
                 StartUI home = new StartUI();
                 remove(jPanel);
                 add(home);
@@ -51,6 +55,16 @@ public class FinPanel extends JPanel {
                 repaint();
             }
         });   
+    }
+    private static void sendToServer(String eventClass, ArrayList<String> data) {
+        try (Socket socket = new Socket("172.20.6.21", 8890);
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+                out.writeObject(eventClass);
+                out.writeObject(data);
+                System.out.println("Event sent to the Server: " + data);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
     }
 
 }

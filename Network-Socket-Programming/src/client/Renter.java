@@ -18,11 +18,13 @@ public class Renter extends JPanel {
     JTextField dongInput = new JTextField(20);
     JButton searchButton = new JButton("검색하기");
     // 검색된 결과를 보여주는 UI
-    JPanel tablePanel = new JPanel();
-    SearchData table;
+    String[] colName = {"ID", "Name", "Age"};
+    JTable table;
+    JScrollPane scrollPane;
+    JPanel scrollPanel = new JPanel();
     // 예약하기
     JPanel reservePanel = new JPanel();
-    JButton reserveButton = new JButton();
+    JButton reserveButton = new JButton("예약 완료");
 
 
     public static void main(String[] args) {
@@ -34,7 +36,10 @@ public class Renter extends JPanel {
         this.setSize(400, 700);
         // this.setLayout(null);
         locationPanel.setLayout(new GridLayout(7, 1));
-        // locationPanel.setBorder(BorderFactory.createEmptyBorder(10 , 20 , 10 , 30));
+        locationPanel.setBorder(BorderFactory.createEmptyBorder(10 , 20 , 10 , 30));
+        scrollPanel.setBorder(BorderFactory.createEmptyBorder(50 , 20 , 10 , 30));
+        // reservePanel.setLayout(new GridLayout(1, 1));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         // 버튼 UI
         /// 주차장 위치
@@ -45,75 +50,10 @@ public class Renter extends JPanel {
         locationPanel.add(dongLabel);
         locationPanel.add(dongInput);
         locationPanel.add(searchButton);
-        /// 검색 결과창
-        Object[][] data = {
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            {"1", "John Doe", "30"},
-            {"2", "Jane Doe", "25"},
-            {"3", "Bob Smith", "40"},
-            // Add more data as needed
-        };
-        table = new SearchData();
-
         add(locationPanel);
         setVisible(true);
+
+        // 검색하기 버튼 이벤트
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,13 +67,44 @@ public class Renter extends JPanel {
 
                 // 서버로 데이터 전송하기
                 //sendToServer("Renter", deliverLocation);
+                Object[][] data = {
+                    {"1", "John Doe", "30"},
+                    {"2", "Jane Doe", "25"},
+                    {"3", "Bob Smith", "40"},
+                    // Add more data as needed
+                };
 
                 // 아래 전달받은 결과 추가
-                // add(finPanel);
+                String[] colName = {"ID", "Name", "Age"};
+                table = new JTable(data, colName);
+                scrollPane = new JScrollPane(table);
+                scrollPane.setViewportView(table);
+                add(scrollPane);
+                scrollPane.setVisible(true);
                 revalidate();
                 repaint();
             }
+            
         });
+
+        // 예약완료 버튼 이벤트
+        reserveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // 완료 패널로 전환
+                FinPanel finPanel = new FinPanel();
+                remove(locationPanel);
+                remove(scrollPane);
+                remove(reservePanel);
+                add(finPanel);
+                revalidate();
+                repaint();
+            }
+            
+        });
+        reservePanel.add(reserveButton);
+        add(reservePanel);
+        
 
     }
     private static void sendToServer(String eventClass, ArrayList<String> data) {
