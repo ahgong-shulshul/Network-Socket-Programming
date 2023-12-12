@@ -73,7 +73,7 @@ public class StartUI extends JFrame {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 out.writeObject(eventClass);
                 out.writeObject(data);
-                System.out.println("Event sent to the Server: " + data);
+                System.out.println("Client to Server from " + eventClass + ":: content ->" + data);
             } catch (IOException e) {
                 e.printStackTrace();
             }

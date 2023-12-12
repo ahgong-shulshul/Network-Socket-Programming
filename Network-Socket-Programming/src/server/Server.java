@@ -45,13 +45,15 @@ public class Server {
         }
         private void handleButtonClickEvent(String eventName, ArrayList<String> data) throws IOException {
             if ("UserLogin".equals(eventName)) {
+                System.out.println("Client to Server: " + data.toString());
                 DatabaseMysql.putUsername(data.get(0).toString());
             }
             else if ("UserLogout".equals(eventName)) {
+                System.out.println("Client to Server: " + data.toString());
                 DatabaseMysql.delUsername();
             }
             else if ("saveProviderData".equals(eventName)) {
-                System.out.println(data);
+                System.out.println("Client to Server: " + data.toString());
                 DatabaseMysql.saveProviderData(data);
                 System.out.println("Received Event From Client");
             }
@@ -63,6 +65,7 @@ public class Server {
                 sendToClient("getAvailableList", totalProvider);
             }
             else if ("makeReservation".equals(eventName)) {
+                System.out.println("Client to Server: " + data.toString());
                 DatabaseMysql.makeReservation(data.get(0).toString());
             }
             else if ("".equals(eventName)) {
@@ -70,6 +73,7 @@ public class Server {
             }
         }
         private static void sendToClient(String eventClass, ArrayList<ArrayList<String>> data) {
+            System.out.println("Server to Client: " + data.toString());
             try (ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
                 out.writeObject(eventClass);
                 out.writeObject(data);

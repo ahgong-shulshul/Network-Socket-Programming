@@ -156,7 +156,7 @@ public class Provider extends JPanel {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 out.writeObject(eventClass);
                 out.writeObject(data);
-                System.out.println("Event sent to the Server: " + data);
+                System.out.println("Client to Server From " + eventClass + ":: content ->" + data);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -128,7 +128,7 @@ public class Renter extends JPanel {
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
             out.writeObject(eventClass);
             out.writeObject(data);
-            System.out.println("Event sent to the Server: " + data);
+            System.out.println("Client to Server From " + eventClass + ":: content ->" + data);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -141,14 +141,11 @@ public class Renter extends JPanel {
             Object receivedObjectOne = inputStream.readObject();
             Object receivedObjectTwo = inputStream.readObject();
 
-            System.out.println(receivedObjectOne);
-            System.out.println(receivedObjectTwo);
-
             if (receivedObjectTwo instanceof ArrayList<?>) {
                 receivedNestedList = (ArrayList<ArrayList<String>>) receivedObjectTwo;
             }
-            System.out.println(receivedObjectTwo);
-
+            System.out.println("Server to Client from " + receivedObjectOne + ":: content ->");
+            
             for (ArrayList<String> innerList : receivedNestedList) {
                 for (String value : innerList) {
                     System.out.print(value + " ");
