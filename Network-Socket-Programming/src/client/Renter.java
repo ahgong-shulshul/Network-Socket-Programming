@@ -67,6 +67,7 @@ public class Renter extends JPanel {
 
                 // 서버로 데이터 전송하기
                 //sendToServer("Renter", deliverLocation);
+                // getFromServer
                 Object[][] data = {
                     {"1", "John Doe", "30"},
                     {"2", "Jane Doe", "25"},
@@ -87,10 +88,13 @@ public class Renter extends JPanel {
             
         });
 
+        
+
         // 예약완료 버튼 이벤트
         reserveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                printSelectedRowAndColumn();
                 // 완료 패널로 전환
                 FinPanel finPanel = new FinPanel();
                 remove(locationPanel);
@@ -116,6 +120,17 @@ public class Renter extends JPanel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+    }
+    private void printSelectedRowAndColumn() {
+        int selectedRow = table.getSelectedRow();
+        int selectedColumn = table.getSelectedColumn();
+
+        if (selectedRow == -1 || selectedColumn == -1) {
+            System.out.println("No selection");
+        } else {
+            System.out.println("Selected Row: " + selectedRow);
+            System.out.println("Selected Column: " + selectedColumn);
+        }
     }
 
 }

@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import java.awt.event.*;
 import javax.swing.table.*;
 
@@ -44,10 +47,11 @@ public class StartUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 ArrayList<String> idInputValue = new ArrayList<String>();
                 idInputValue.add(userIDInput.getText());
+                // idInputValue.add(userIDInput.getText());
                 // 서버로 전송
                 // sendToServer("StartUI", idInputValue);
                 // 창 전환
-                InitUI home = new InitUI();
+                MainUI home = new MainUI();
                 dispose();
                 add(home);
                 revalidate();
@@ -77,6 +81,5 @@ public class StartUI extends JFrame {
                 e.printStackTrace();
             }
     }
-    
     
 }

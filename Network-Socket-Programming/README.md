@@ -1,18 +1,23 @@
-## Getting Started
+## 주제 및 선정 이유
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+서울, 경기도, 인천과 같은 대도시는 주차 공간 부족 문제로 심각한 교통 혼잡 및 주차 어려움을 겪고 있습니다. 이 문제는 일상 생활에 불편을 초래하고, 더 나아가 시간과 에너지 낭비로 이어집니다. 현재 주차 정책이나 공공 주차장, 공동 주차 공간 대여 등의 서비스가 진행되고 있지만 이러한 문제를 완전히 해결하지 못하고, 더 나은 대안이 필요하다고 느꼈습니다. 이러한 문제의 해결을 위해서 저희팀은 개인 주차 공간 대여 서비스를 제안합니다. 
 
-## Folder Structure
+## 서비스 내용
 
-The workspace contains two folders by default, where:
+### 개인 주차장 제공자
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+주차 대여 공간, 가용 시간, 시간 당 요금을 설정하여 빈 주차장에 대한 정보를 제공합니다.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+### 개인 주차장 대여자
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+개인 주차공간 제공자가 올려놓은 주차장을 확인하여 유저가 필요한 공간에 대해 검색 및 예약 완료하기를 누릅니다.
 
-## Dependency Management
+## 소캣 프로그래밍 사용하여 Server-Client 통신
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- src/client/FinPanel.java: 서비스 이용 완료 후 나오는 패널
+- src/client/MainUI.java: 서비스 이용 시 메인 페이지 프레임
+- src/client/Provider.java: 서비스 이용 시 개인 주차 공간 제공자가 이용하는 페이지로 주차 대여 공간, 가용 시간, 시간 당 요금을 입력할 수 있는 패널
+- src/client/Renter.java: 서비스 이용 시 개인 주차 공간 대여자가 이용하는 페이지로 대여하고자 하는 주차 공간을 검색하여 선택하고 예약할 수 있는 패널
+- src/client/StartUI.java: 서비스 이용 전 유저의 ID 입력을 하는 프레임
+- src/server/Server.java
+- src/server/

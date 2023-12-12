@@ -6,7 +6,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class InitUI extends JFrame {
+public class MainUI extends JFrame {
     // 버튼 UI
     JPanel pvBtContainer = new JPanel();
     JButton providerButton = new JButton("주차장 제공하기");
@@ -15,10 +15,10 @@ public class InitUI extends JFrame {
     JPanel buttonContainer = new JPanel();
 
     public static void main(String[] args) {
-        new InitUI();
+        new MainUI();
     }
 
-    public InitUI() {
+    public MainUI() {
         // Frame 기본 설정
         setTitle("주차장 제공/대여 서비스");
         setSize(400, 700);

@@ -35,7 +35,7 @@ public class FinPanel extends JPanel {
         homeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                InitUI home = new InitUI();
+                MainUI home = new MainUI();
                 remove(jPanel);
                 add(home);
                 revalidate();
