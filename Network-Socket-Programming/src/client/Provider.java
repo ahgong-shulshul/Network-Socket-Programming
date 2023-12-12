@@ -156,8 +156,8 @@ public class Provider extends JPanel {
                 out.writeObject(eventClass);
                 out.writeObject(data);
                 System.out.println("Event sent to the Server: " + data);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
