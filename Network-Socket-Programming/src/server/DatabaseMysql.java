@@ -90,7 +90,7 @@ public class DatabaseMysql {
                 if (rowsAffected > 0) {
                     System.out.println("Username inserted successfully.");
                 } else {
-                    System.out.println("Failed to insert username.");
+                    System.out.println("Failed to delete username.");
                 }
             }
         } catch (SQLException e) {
@@ -145,7 +145,7 @@ public class DatabaseMysql {
 
         try (Connection connection = connect()) {
             System.out.println(loc);
-            String sql = "select * from car_place where (location) like ?";
+            String sql = "select * from car_place where (location) like ? and (is_available) = 1";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, "%" + loc + "%");
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -226,12 +226,20 @@ public class DatabaseMysql {
     public static void makeReservation(String parking_loc) {
         // is_available=0 으로 바꾸고 테이블에 insert
         // 이거 안되면 개수 세서 하던가
+        System.out.println("<makeReservation 메소드>");
         String cur_user = getUsername();
+        System.out.println(cur_user);
         try (Connection connection = connect()) {
             String sql = "update car_place set is_available = 0 where place_no = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, parking_loc);
-                ResultSet resultSet = preparedStatement.executeQuery();
+//                ResultSet resultSet = preparedStatement.executeQuery();
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Data update successfully.");
+                } else {
+                    System.out.println("Failed to insert data.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -241,7 +249,12 @@ public class DatabaseMysql {
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, parking_loc);
                 preparedStatement.setString(2, cur_user);
-                ResultSet resultSet = preparedStatement.executeQuery();
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Reservation Completed");
+                } else {
+                    System.out.println("Failed.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

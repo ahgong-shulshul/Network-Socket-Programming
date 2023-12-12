@@ -62,6 +62,9 @@ public class Server {
 
                 sendToClient("getAvailableList", totalProvider);
             }
+            else if ("makeReservation".equals(eventName)) {
+                DatabaseMysql.makeReservation(data.get(0).toString());
+            }
             else if ("".equals(eventName)) {
                 // 추가 이벤트
             }

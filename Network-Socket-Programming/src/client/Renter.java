@@ -97,14 +97,26 @@ public class Renter extends JPanel {
         reserveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 완료 패널로 전환
-                FinPanel finPanel = new FinPanel();
-                remove(locationPanel);
-                remove(scrollPane);
-                remove(reservePanel);
-                add(finPanel);
-                revalidate();
-                repaint();
+                int selectedRow = table.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    String noCol = (String)table.getValueAt(selectedRow, 0);
+                    System.out.println("Selected Data no: " + noCol);
+
+                    // 서버로 데이터 전달
+                    ArrayList<String> data = new ArrayList<>();
+                    data.add(noCol);
+                    sendToServer("makeReservation", data);
+                    // 완료 패널로 전환
+                    FinPanel finPanel = new FinPanel();
+                    remove(locationPanel);
+                    remove(scrollPane);
+                    remove(reservePanel);
+                    add(finPanel);
+                    revalidate();
+                    repaint();
+                }
+
             }
         });
         reservePanel.add(reserveButton);
@@ -112,7 +124,7 @@ public class Renter extends JPanel {
     }
 
     private static void sendToServer(String eventClass, ArrayList<String> data) {
-        try (Socket socket = new Socket("172.20.6.21", 8890);
+        try (Socket socket = new Socket("172.20.6.80", 8890);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
             out.writeObject(eventClass);
             out.writeObject(data);
@@ -124,7 +136,7 @@ public class Renter extends JPanel {
 
     private static ArrayList<ArrayList<String>> getFromServer() {
         ArrayList<ArrayList<String>> receivedNestedList = new ArrayList<>();
-        try (Socket socket = new Socket("172.20.6.21", 8890);
+        try (Socket socket = new Socket("172.20.6.80", 8890);
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
             Object receivedObjectOne = inputStream.readObject();
             Object receivedObjectTwo = inputStream.readObject();
