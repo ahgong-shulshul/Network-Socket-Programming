@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
+
 public class Renter extends JPanel {
     // 주차장 위치 입력받기 위한 UI
     JPanel locationPanel = new JPanel();
@@ -61,21 +62,27 @@ public class Renter extends JPanel {
                 String doInputValue = doInput.getText();
                 String siInputValue = siInput.getText();
                 String dongInputValue = dongInput.getText();
-                
+
                 // 서버로 전달할 데이터로 가공하기
                 String deliverLocation = doInputValue + " " + siInputValue + " " + dongInputValue;
 
-                // 서버로 데이터 전송하기
-                //sendToServer("Renter", deliverLocation);
-                Object[][] data = {
-                    {"1", "John Doe", "30"},
-                    {"2", "Jane Doe", "25"},
-                    {"3", "Bob Smith", "40"},
-                    // Add more data as needed
-                };
+                ArrayList<String> toserver = new ArrayList<>();
+                toserver.add(deliverLocation);
 
-                // 아래 전달받은 결과 추가
-                String[] colName = {"ID", "Name", "Age"};
+                sendToServer("getAvailableList", toserver);
+
+                ArrayList<ArrayList<String>> serverData;
+                serverData = getFromServer();
+                System.out.println(serverData);
+
+                Object[][] data = new Object[serverData.size()][serverData.get(0).size()];
+                for (int i = 0; i < serverData.size(); i++) {       // 행
+                    for (int j = 0; j < serverData.get(0).size(); j++) {
+                        data[i][j] = serverData.get(i).get(j);
+                    }
+                }
+
+                String[] colName = {"No", "Name", "Price", "StartTime", "EndTime"};
                 table = new JTable(data, colName);
                 scrollPane = new JScrollPane(table);
                 scrollPane.setViewportView(table);
@@ -84,10 +91,9 @@ public class Renter extends JPanel {
                 revalidate();
                 repaint();
             }
-            
         });
 
-        // 예약완료 버튼 이벤트
+        // 예약 완료 버튼 이벤트
         reserveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -100,22 +106,47 @@ public class Renter extends JPanel {
                 revalidate();
                 repaint();
             }
-            
         });
         reservePanel.add(reserveButton);
         add(reservePanel);
-        
-
     }
+
     private static void sendToServer(String eventClass, ArrayList<String> data) {
         try (Socket socket = new Socket("172.20.6.21", 8890);
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
-                out.writeObject(eventClass);
-                out.writeObject(data);
-                System.out.println("Event sent to the Server: " + data);
-            } catch (IOException e) {
-                e.printStackTrace();
+             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
+            out.writeObject(eventClass);
+            out.writeObject(data);
+            System.out.println("Event sent to the Server: " + data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static ArrayList<ArrayList<String>> getFromServer() {
+        ArrayList<ArrayList<String>> receivedNestedList = new ArrayList<>();
+        try (Socket socket = new Socket("172.20.6.21", 8890);
+            ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
+            Object receivedObjectOne = inputStream.readObject();
+            Object receivedObjectTwo = inputStream.readObject();
+
+            System.out.println(receivedObjectOne);
+            System.out.println(receivedObjectTwo);
+
+            if (receivedObjectTwo instanceof ArrayList<?>) {
+                receivedNestedList = (ArrayList<ArrayList<String>>) receivedObjectTwo;
             }
+            System.out.println(receivedObjectTwo);
+
+            for (ArrayList<String> innerList : receivedNestedList) {
+                for (String value : innerList) {
+                    System.out.print(value + " ");
+                }
+                System.out.println();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+        }
+        return receivedNestedList;
     }
 
 }

@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
+
 public class FinPanel extends JPanel {
     JPanel jPanel = new JPanel();
     JLabel finLabel = new JLabel("이용해주셔서 감사합니다.");
@@ -46,7 +47,7 @@ public class FinPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 서버로 전송
-                // sendToServer("FinPanel", null);
+                sendToServer("UserLogout", null);
                 // 창 전환
                 StartUI home = new StartUI();
                 remove(jPanel);
@@ -62,9 +63,9 @@ public class FinPanel extends JPanel {
                 out.writeObject(eventClass);
                 out.writeObject(data);
                 System.out.println("Event sent to the Server: " + data);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

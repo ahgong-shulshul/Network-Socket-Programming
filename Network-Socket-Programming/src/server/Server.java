@@ -19,7 +19,7 @@ public class Server {
     }
 
     private static class ClientHandler implements Runnable {
-        private Socket clientSocket;
+        private static Socket clientSocket;
         public ClientHandler(Socket clientSocket) {
             this.clientSocket = clientSocket;
         }
@@ -32,7 +32,6 @@ public class Server {
                 Object firstObject = in.readObject();
                 Object secondObject = in.readObject();
 
-                System.out.println("where");
                 System.out.println(firstObject);
                 System.out.println(secondObject);
 
@@ -58,20 +57,24 @@ public class Server {
             }
             else if ("getAvailableList".equals(eventName)) {
                 ArrayList<ArrayList<String>> totalProvider;
-                totalProvider = DatabaseMysql.getAvailableList(data.toString());
-                try (ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
-                    out.writeObject(totalProvider);
-                    System.out.println("Sent to Client");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                totalProvider = DatabaseMysql.getAvailableList(data.get(0).toString());
+                System.out.println(totalProvider);
+
+                sendToClient("getAvailableList", totalProvider);
             }
             else if ("".equals(eventName)) {
-
+                // 추가 이벤트
             }
-            else if ("".equals(eventName)) {
-
+        }
+        private static void sendToClient(String eventClass, ArrayList<ArrayList<String>> data) {
+            try (ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream())) {
+                out.writeObject(eventClass);
+                out.writeObject(data);
+                System.out.println("Event sent to the Client: " + data);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
+
 }

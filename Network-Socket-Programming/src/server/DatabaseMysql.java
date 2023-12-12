@@ -2,7 +2,7 @@ package server;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class DatabaseMysql {
     private static final String URL = "jdbc:mysql://localhost/network_pj";
@@ -14,15 +14,15 @@ public class DatabaseMysql {
     }
 
     private static boolean isUserExist(String user) {
+        System.out.println("<isUserExist 메소드>");
         try (Connection connection = connect()) {
-            String sql = "select count(*) FROM user WHERE uname columnName = ?";
+            String sql = "select count(*) FROM user WHERE uname = ?";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 preparedStatement.setString(1, user);
-
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
                     if (resultSet.next()) {
                         int count = resultSet.getInt(1);
-                        return true;
+                        return count > 0;
                     }
                 }
             }
@@ -31,15 +31,12 @@ public class DatabaseMysql {
         }
         return false;
     }
-    // user에 없으면 추가
-
 
     public static void putUsername(String username) {
+        System.out.println("<putUsername 메소드>");
         try (Connection connection = connect()) {
             // 중복인지 확인 필요
-            if (isUserExist(username)) {
-                System.out.println("조치를 취하기");
-            } else {
+            if (!isUserExist(username)) {
                 String sql = "insert into user (uname) values (?)";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                     preparedStatement.setString(1, username);
@@ -67,8 +64,9 @@ public class DatabaseMysql {
     }
 
     private static String getUsername() {
+        System.out.println("<getUsername 메소드>");
         String username = "";
-        try (Connection connection = connect()){
+        try (Connection connection = connect()) {
             String sql = "select * from cur_user";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
                 try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -84,10 +82,16 @@ public class DatabaseMysql {
     }
 
     public static void delUsername() {
+        System.out.println("<delUsername 메소드>");
         try (Connection connection = connect()) {
             String sql = "delete from cur_user";
             try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                ResultSet resultSet = preparedStatement.executeQuery();
+                int rowsAffected = preparedStatement.executeUpdate();
+                if (rowsAffected > 0) {
+                    System.out.println("Username inserted successfully.");
+                } else {
+                    System.out.println("Failed to insert username.");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -96,7 +100,7 @@ public class DatabaseMysql {
 
     // Provider -> Server: 주차공간 등록
     public static void saveProviderData(ArrayList<String> data) {
-        System.out.println("database.java 파일");
+        System.out.println("<saveProviderData 메소드>");
         System.out.println(data);
 
         for (int i = 0; i < data.size(); i++) {
@@ -121,10 +125,8 @@ public class DatabaseMysql {
                 preparedStatement.setString(4, av_time_end);
                 preparedStatement.setInt(5, price);
                 preparedStatement.setInt(6, is_available);
-                System.out.println("try 문 안에 들어옴");
 
                 int rowsAffected = preparedStatement.executeUpdate();
-
                 if (rowsAffected > 0) {
                     System.out.println("Data inserted successfully.");
                 } else {
@@ -135,7 +137,39 @@ public class DatabaseMysql {
             e.printStackTrace();
         }
     }
+
     public static ArrayList<ArrayList<String>> getAvailableList(String loc) {
+        System.out.println("<getAvailableList 메소드>");
+        ArrayList<ArrayList<String>> totalProvider = new ArrayList<>();
+        ArrayList<String> singleProvider = new ArrayList<>();
+
+        try (Connection connection = connect()) {
+            System.out.println(loc);
+            String sql = "select * from car_place where (location) like ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+                preparedStatement.setString(1, "%" + loc + "%");
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    System.out.println(resultSet.getRow());
+                    while (resultSet.next()) {
+                        System.out.println(resultSet.getMetaData().getColumnCount());
+                        for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
+                            Object value = resultSet.getObject(i);
+                            System.out.println(value);
+                            singleProvider.add(String.valueOf(value));
+                        }
+                        totalProvider.add(new ArrayList<>(singleProvider));
+                        singleProvider.clear();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return totalProvider;
+    }
+
+    public static ArrayList<ArrayList<String>> getAvailableList2(String loc) {
+        System.out.println(loc);
         ArrayList<ArrayList<String>> totalProvider = new ArrayList<>();
         ArrayList<String> singleProvider = new ArrayList<>();
 
@@ -159,16 +193,23 @@ public class DatabaseMysql {
             } else {
                 sql = "select * from car_place where (location) like ? and is_available = 1";
                 try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-                    preparedStatement.setString(1, "%" + loc + "%");
+                    String temp = "%" + loc + "%";
+                    System.out.println(temp);
+                    preparedStatement.setString(1, temp);
+                    System.out.println(sql);
 
                     try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                        System.out.println(resultSet);
                         while (resultSet.next()) {
                             ResultSetMetaData metaData = resultSet.getMetaData();
+                            System.out.println(metaData);
 
                             int columnCount = metaData.getColumnCount();
+                            System.out.println(columnCount);
                             for (int i = 1; i <= columnCount; i++) {
 //                                String columnName = metaData.getColumnName(i);
                                 Object value = resultSet.getObject(i);
+                                System.out.println(value);
                                 singleProvider.add((String) value);     // 확인 필요
                             }
                             totalProvider.add(singleProvider);
