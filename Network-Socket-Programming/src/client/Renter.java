@@ -83,6 +83,9 @@ public class Renter extends JPanel {
                 }
 
                 String[] colName = {"No", "Name", "Price", "StartTime", "EndTime"};
+                if (scrollPane != null) {
+                    remove(scrollPane);
+                }
                 table = new JTable(data, colName);
                 scrollPane = new JScrollPane(table);
                 scrollPane.setViewportView(table);
