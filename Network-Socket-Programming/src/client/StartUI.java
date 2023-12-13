@@ -69,7 +69,7 @@ public class StartUI extends JFrame {
         setVisible(true);
     }
     private static void sendToServer(String eventClass, ArrayList<String> data) {
-        try (Socket socket = new Socket("172.20.6.80", 8890);
+        try (Socket socket = new Socket("172.20.19.60", 8891);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
                 out.writeObject(eventClass);
                 out.writeObject(data);

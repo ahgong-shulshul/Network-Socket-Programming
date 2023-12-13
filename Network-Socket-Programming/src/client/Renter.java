@@ -82,7 +82,7 @@ public class Renter extends JPanel {
                     }
                 }
 
-                String[] colName = {"No", "Name", "Price", "StartTime", "EndTime"};
+                String[] colName = {"No", "Name", "Location", "Price", "StartTime", "EndTime"};
                 if (scrollPane != null) {
                     remove(scrollPane);
                 }
@@ -127,7 +127,7 @@ public class Renter extends JPanel {
     }
 
     private static void sendToServer(String eventClass, ArrayList<String> data) {
-        try (Socket socket = new Socket("172.20.6.80", 8890);
+        try (Socket socket = new Socket("172.20.19.60", 8891);
              ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
             out.writeObject(eventClass);
             out.writeObject(data);
@@ -139,7 +139,7 @@ public class Renter extends JPanel {
 
     private static ArrayList<ArrayList<String>> getFromServer() {
         ArrayList<ArrayList<String>> receivedNestedList = new ArrayList<>();
-        try (Socket socket = new Socket("172.20.6.80", 8890);
+        try (Socket socket = new Socket("172.20.19.60", 8891);
             ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
             Object receivedObjectOne = inputStream.readObject();
             Object receivedObjectTwo = inputStream.readObject();
