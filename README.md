@@ -45,7 +45,7 @@ L3 스위치를 통해 전달된 데이터는 Router와 Backbone을 거쳐 클�
 
 ### 2-2. 주차 공간 대여자 선택 시
 
-<p align="center"><img align="center" width="300" alt="renter" src="./images/Main2-1.png"><img align="center" width="300" alt="renter" src="./images/Main2-2.png"></p> <br>
+<p align="center"><img align="center" width="300" alt="renter" src="./images/Main2-1.png">&nbsp<img align="center" width="300" alt="renter" src="./images/Main2-2.png"></p> <br>
 
 주차장 위치 검색 후 대여하고자 하는 위치를 예약합니다.
 
