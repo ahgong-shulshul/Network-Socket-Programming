@@ -1,9 +1,9 @@
-## 주제 선정 및 배경
+## 1️⃣ 주제 선정 및 배경
 
 ![주제선정및배경](./images/Network%20최종발표_page-0002.jpg) <br>
 서울, 경기도, 인천과 같은 대도시는 주차 공간 부족 문제로 심각한 교통 혼잡 및 주차 어려움을 겪고 있습니다. 이 문제는 일상 생활에 불편을 초래하고, 더 나아가 시간과 에너지 낭비로 이어집니다. 현재 주차 정책이나 공공 주차장, 공동 주차 공간 대여 등의 서비스가 진행되고 있지만 이러한 문제를 완전히 해결하지 못하고, 더 나은 대안이 필요하다고 느꼈습니다. 이러한 문제의 해결을 위해서 저희팀은 개인 주차 공간 대여 서비스를 제안합니다. 
 
-## 서비스 내용
+## 2️⃣ 서비스 내용
 
 ![서비스내용](./images/Network%20최종발표_page-0003.jpg) <br>
 
@@ -15,7 +15,7 @@
 ***User2***: 주차 공간 이용 희망에 대한 데이터를 주차장 대여 시스템에 전송합니다.
 
 
-## 서비스 SAN
+## 3️⃣ 서비스 SAN
 
 ![SAN](./images/Network%20최종발표_page-0004.jpg) <br>
 
@@ -27,6 +27,27 @@ L3 스위치를 통해 전달된 데이터는 Router와 Backbone을 거쳐 클�
 클라우드를 사용하는 경우, 클라우드와의 연결, 네트워크, 물리적 장치와 위치, 구동은 모두 클라우드 제공자가 상품으로써 판매하는 것을 사용하는 것이므로, L2 스위치를 삭제하고 하나로 묶어 표현하였습니다. <br>
 추가로 클라우드에는 모바일 애플리케이션 서버, 데이터베이스 서버, 인증서버, 결제 서버, 보안 서버 등의 서버들도 포함되어 있습니다.
 
+## 4️⃣ 서비스 소개
+
+### 1. 초기 화면
+
+<p align="center"><img align="center" width="300" alt="초기화면" src="./images/StartUI.png"></p>
+
+### 2. 주차 공간 제공자/대여자 선택
+
+<p align="center"><img align="center" width="300" alt="선택" src="./images/InitUI.png"></p>
+
+### 2-1. 주차 공간 제공자 선택 시
+
+<p align="center"><img align="center" width="300" alt="provider" src="./images/Main1.png"></p> <br>
+
+주차 공간을 제공하고자 하는 주차장 위치, 사용가능 시간, 시간 당 요금을 서버로 전송합니다. 
+
+### 2-2. 주차 공간 대여자 선택 시
+
+<p align="center"><img align="center" width="300" alt="renter" src="./images/Main2-1.png"><img align="center" width="300" alt="renter" src="./images/Main2-2.png"></p> <br>
+
+주차장 위치 검색 후 대여하고자 하는 위치를 예약합니다.
 
 ## 소캣 프로그래밍 사용하여 Server-Client 통신
 
@@ -43,6 +64,8 @@ L3 스위치를 통해 전달된 데이터는 Router와 Backbone을 거쳐 클�
 ### DB 설명
 
 ![DB](./images/Network%20최종발표_page-0010.jpg) <br>
+
+
 
 ## 서비스 기대 효과
 
